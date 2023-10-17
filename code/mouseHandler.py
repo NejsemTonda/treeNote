@@ -38,9 +38,10 @@ class MouseHandler:
                         self.grap_offset = self.mouse_node.pos - mouse_pos + self.offset
             else:
                 if not self.grab_node:
-                    self.offset = self.offset + mouse_pos - self.last_mouse
+                    self.offset += mouse_pos - self.last_mouse
                 else:
-                    self.grab_node.apply_to_childs_and_parent(lambda x: x.move(x.pos - self.grab_node.pos + self.mouse_node + self.offset + self.grab_offset))
+                    self.grab_node.apply_to_childs_and_parent(lambda x: x.move((x.pos - self.grab_node.pos) + mouse_pos + self.offset + self.grab_offset))
+
         else:
             self.grab_node = None
             self.clicked = False
@@ -54,6 +55,8 @@ class MouseHandler:
                 #master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False)
                 #master_node.unvisit()
 
+
+        master_node.unvisit()
         self.last_mouse = mouse_pos
 
     def on_node(self, mouse_pos, node):

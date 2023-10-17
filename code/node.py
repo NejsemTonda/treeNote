@@ -1,11 +1,12 @@
 import os
 import config
 import pygame
+from vectors import Vct
 
 class Node:
     def __init__(self, pos, r, name):
         self.pos = pos
-        #self.des_pos = pos
+        self.des_pos = pos
         self.radius = r
         self.visited = False
         self.selected = False
@@ -22,18 +23,20 @@ class Node:
         drawPos = self.pos+mid 
 
 
-        pygame.draw.circle(screen, config.nodeColor, drawPos.tuple(), self.radius, config.line_width)
+        pygame.draw.circle(screen, config.nodeColor, drawPos.int_tuple(), self.radius, config.line_width)
+        print(screen, config.nodeColor, drawPos.int_tuple(), self.radius, config.line_width)
         print(f"drawing {self.name}")
 
         if self.selected:
-            pygame.draw.circle(screen, config.selected, drawPos.tuple(), self.radius - 1, config.line_width)
+            pygame.draw.circle(screen, config.selected, drawPos.int_tuple(), self.radius - 1, config.line_width)
 
-        #text_surface = font.render(self.name, True, (255, 255, 255))
-        #text_rect = text_surface.get_rect(center=(act_pos[0], act_pos[1] + int(self.radius) + 10))
-        #screen.blit(text_surface, text_rect)
+        text_surface = font.render(self.name, True, (255, 255, 255))
+        text_rect = text_surface.get_rect()
+        text_rect.center = (drawPos + Vct(0, self.radius + 10)).int_tuple()
+        screen.blit(text_surface, text_rect)
 
         for n in self.childs:
-            pygame.draw.aaline(screen, config.arrows, drawPos.tuple(), (n.pos+mid).tuple(), config.line_width)
+            pygame.draw.aaline(screen, config.arrows, drawPos.int_tuple(), (n.pos+mid).int_tuple(), config.line_width)
 
         #if self.draw_thumbnail and self.thumbnail:
         #    thumbnail_rect = self.get_thumbnail_rect()
@@ -47,15 +50,15 @@ class Node:
         self.des_pos = to
 
     def update(self):
-        if self.draw_thumbnail:
-            return
+        #if self.draw_thumbnail:
+        #    return
         if self.pos == self.des_pos:
             return
-        dif = pygame.math.Vector2(self.des_pos[0] - self.pos[0], self.des_pos[1] - self.pos[1])
-        if dif.length() < 1:
+        dif = self.des_pos - self.pos 
+        if dif.mag() < 1:
             self.pos = self.des_pos
             return
-        self.pos = (self.pos[0] + dif[0] / 10, self.pos[1] + dif[1] / 10)
+        self.pos = self.pos + dif*0.1
 
     def apply_to_childs(self, foo):
         self.visited = True

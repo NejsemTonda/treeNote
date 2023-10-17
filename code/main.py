@@ -38,7 +38,11 @@ while not end:
 
     mh.update(pygame.mouse.get_pressed()[0], keys[pygame.K_LCTRL], mouse_pos, master_node)
     screen.fill((0,0,0))
-    master_node.apply_to_childs(lambda x : x.draw(screen, mid, font))
+
+    master_node.apply_to_childs_and_parent(lambda x : x.draw(screen, mid, font))
+    master_node.unvisit()
+
+    master_node.apply_to_childs_and_parent(lambda x : x.update())
     master_node.unvisit()
 
     clock.tick(60)

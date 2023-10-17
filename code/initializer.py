@@ -20,7 +20,7 @@ def parseLine(stream, depth = 0):
     name = tokens[0]
     pos = Vct.fromTuple(list(map(float, tokens[1].split(","))))
     childs = int(tokens[2])
-    node = Node(pos, config.defaultRadius * depth**config.scaler, name) 
+    node = Node(pos, config.defaultRadius * config.scaler**depth, name) 
 
     for _ in range(childs):
         child = parseLine(stream, depth+1)

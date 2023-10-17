@@ -47,12 +47,12 @@ class Vct:
         return(Vct(x, y))
 
     def __repr__(self):
-        return "(%s, %s)" % (self.x, self.y)
+        return f"({self.x}, {self.y})"
 
     def __getitem__(self, key): # self[key]
-        return (int(self.x), int(self.y))[key]
+        return (self.x, self.y)[key]
 
-    def tuple(self):
+    def int_tuple(self):
         return (int(self.x), int(self.y))
 
     def copy(self):
