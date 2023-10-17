@@ -1,0 +1,71 @@
+import config
+import os
+#from convertor import convert
+
+class FileHandler:
+    def __init__(self):
+        self.opened_file = None 
+        self.edit_file = "edit" + config.ext
+
+        if not os.path.exists(self.edit_file):
+            raise FileNotFoundError(config.no_init_msg)
+
+    def changed_to_file(self, file_name):
+        
+        if self.opened_file is not None:
+            self.save_current_file()
+        self.load_file(f"notes/{file_name}{config.ext}")
+
+
+    def save_current_file(self):
+        file = NoteFile(self.edit_file)
+        # if topic changed, delete old file 
+        if file.path != self.opened_file:
+            self.delete_file(self.opened_file)
+        
+        #convert(file.path)
+        file.dump()
+
+    def load_file(self, file_path):
+        file = NoteFile(file_path) 
+        file.dump(dest=self.edit_file)
+        self.opened_file = file.path
+    
+    def get_current_topic(self):
+        with open(self.edit_file, 'r') as file:
+            name = file.readline()[1:].strip()
+            return name
+
+    @staticmethod
+    def delete_file(file_name):
+        if os.path.exists(file_name):
+            os.remove(file_name)
+        else:
+            print(f"Tried to delete {file_name}, but the file doesn't exist.")
+
+    @staticmethod
+    def check_for_delete(node):
+        for n in node.childs:
+            if n.name.lower() in ["delete", "del"]:
+                node.childs.remove(n)
+                return
+
+
+
+class NoteFile:
+    def __init__(self, name):
+        self.topic = None
+        self.content = ""
+        with open(name, 'r') as file:
+            while line := file.readline():
+                if not self.topic:
+                    self.topic = line[1:].strip()
+                self.content += line 
+        self.topic = "unnamed" if not self.topic else self.topic
+        self.path = f"notes/{self.topic}{config.ext}"
+
+    def dump(self, dest=None):
+        if not dest:
+            dest = self.path
+        with open(dest, 'w') as save_to:
+            save_to.write(self.content) 

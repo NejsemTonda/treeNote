@@ -1,4 +1,4 @@
-#from fileHandler import FileHandler
+from fileHandler import FileHandler
 import pygame
 from vectors import Vct
 
@@ -7,12 +7,11 @@ class MouseHandler:
         self.clicked = False
         self.mouse_node = None
         self.grab_node = None
-        self.selected_node = None
         self.grab_start = Vct(0, 0)
         self.grab_offset = Vct(0, 0)
         self.offset = Vct(0, 0)
         self.last_mouse = Vct(0, 0)
-        #self.fh = FileHandler()
+        self.fh = FileHandler()
 
     def update(self, m1, ctrl, mouse_pos, master_node):
         self.mouse_node = self.on_node(mouse_pos-self.offset, master_node)
@@ -23,7 +22,7 @@ class MouseHandler:
                 self.clicked = True
                 self.grab_start = mouse_pos
 
-                #master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False)
+                #master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False, ignore_parent = True)
                 #master_node.unvisit()
 
                 if ctrl:
@@ -40,7 +39,7 @@ class MouseHandler:
                 if not self.grab_node:
                     self.offset += mouse_pos - self.last_mouse
                 else:
-                    self.grab_node.apply_to_childs_and_parent(lambda x: x.move((x.pos - self.grab_node.pos) + mouse_pos + self.offset + self.grab_offset))
+                    self.grab_node.apply_to_childs(lambda x: x.move((x.pos - self.grab_node.pos) + mouse_pos + self.offset + self.grab_offset))
 
         else:
             self.grab_node = None
@@ -52,7 +51,7 @@ class MouseHandler:
                 self.mouse_node.draw_thumbnail = True
             else:
                 pass
-                #master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False)
+                #master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False, ignore_parent = True)
                 #master_node.unvisit()
 
 
@@ -73,21 +72,15 @@ class MouseHandler:
 
     def switch_grabbed(self, switch_to, master_node):
         self.grab_node = switch_to
-        selected_node = None
 
-        master_node.apply_to_childs(lambda x: setattr(x, "selected", False))
-        master_node.unvisit()
+        # find selected node cuz its name may need change
+        if self.fh.opened_file is not None: 
+            selected_node = master_node.find_selected() 
+            master_node.unvisit()
+            new_name = self.fh.get_current_topic()
+            selected_node.name = new_name
+            selected_node.selected = False
 
         switch_to.selected = True
 
-        #new_name = self.fh.get_current_file_name()
-
-        if selected_node and new_name != selected_node.name and new_name != "none":
-            selected_node.name = new_name
-
-        #self.fh.changed_to_file(switch_to.name)
-
-        selected_node = switch_to
-
-
-
+        self.fh.changed_to_file(switch_to.name)

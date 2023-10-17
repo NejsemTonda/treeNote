@@ -24,8 +24,6 @@ class Node:
 
 
         pygame.draw.circle(screen, config.nodeColor, drawPos.int_tuple(), self.radius, config.line_width)
-        print(screen, config.nodeColor, drawPos.int_tuple(), self.radius, config.line_width)
-        print(f"drawing {self.name}")
 
         if self.selected:
             pygame.draw.circle(screen, config.selected, drawPos.int_tuple(), self.radius - 1, config.line_width)
@@ -60,17 +58,16 @@ class Node:
             return
         self.pos = self.pos + dif*0.1
 
-    def apply_to_childs(self, foo):
+    def apply_to_childs(self, foo, ignore_parent=False):
         self.visited = True
+
+        if not ignore_parent:
+            foo(self)
+
         for n in self.childs:
             if n.visited:
                 continue
-            n.apply_to_childs_and_parent(foo)
-
-    def apply_to_childs_and_parent(self, foo):
-        self.visited = True
-        foo(self)
-        self.apply_to_childs(foo)
+            n.apply_to_childs(foo)
 
     def unvisit(self):
         self.visited = False
@@ -89,6 +86,17 @@ class Node:
         c = Node(tpos, rad, new_name)
         self.childs.append(c)
         return c
+
+    def find_selected(self):
+        if self.selected:
+            return self
+
+        for n in self.childs:
+            if n.find_selected() is not None:
+                return n
+
+        return None
+         
 
     def str(self):
         s = ""
