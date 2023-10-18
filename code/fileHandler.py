@@ -36,21 +36,31 @@ class FileHandler:
             name = file.readline()[1:].strip()
             return name
 
-    @staticmethod
-    def delete_file(file_name):
-        if os.path.exists(file_name):
-            os.remove(file_name)
-        else:
-            print(f"Tried to delete {file_name}, but the file doesn't exist.")
+def delete_file(file_name):
+    if os.path.exists(file_name):
+        os.remove(file_name)
+    else:
+        print(f"Tried to delete {file_name}, but the file doesn't exist.")
 
-    @staticmethod
-    def check_for_delete(node):
-        for n in node.childs:
-            if n.name.lower() in ["delete", "del"]:
-                node.childs.remove(n)
-                return
+def check_for_delete(node):
+    for n in node.childs:
+        if n.name.lower() in ["delete", "del"]:
+            node.childs.remove(n)
+            return
+
+def get_correct_name(topic):
+    new_path = config.notes_dir + topic + "{}" + config.ext
+
+    x = ""
+    while os.path.exists(new_path.format(x)):
+        x = 1 if x == "" else x+1
+
+    return topic + str(x)
 
 
+def create_file(topic):
+    with open(config.notes_dir + topic + config.ext, 'w') as file:
+        file.write("# " + topic) 
 
 class NoteFile:
     def __init__(self, name):

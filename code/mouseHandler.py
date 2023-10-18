@@ -26,7 +26,7 @@ class MouseHandler:
 
                 if ctrl:
                     parent = mouse_node if mouse_node else master_node
-                    new_node = to.create_child(parent)
+                    new_node = parent.create_child(mouse_pos - self.offset)
 
                     self.switch_grabbed(new_node, master_node)
                     self.grab_offset = Vct(0, 0)

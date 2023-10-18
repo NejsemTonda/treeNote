@@ -2,6 +2,7 @@ import os
 import config
 import pygame
 from vectors import Vct
+from fileHandler import get_correct_name, create_file
 
 class Node:
     def __init__(self, pos, r, name):
@@ -75,12 +76,9 @@ class Node:
 
     def create_child(self, tpos):
         new_name = self.name + "subtopic"
-        if os.path.exists(config.notes_dir + new_name + config.ext):
-            x = 1
-            while os.path.exists(config.notes_dir + new_name + str(x) + config.ext):
-                x += 1
-            new_name = self.name + "subtopic" + str(x)
-
+        new_name = get_correct_name(new_name) 
+        create_file(new_name)
+        
         rad = config.default_node_size if self.name == "master" else self.radius * config.child_scaler
         c = Node(tpos, rad, new_name)
         self.childs.append(c)
