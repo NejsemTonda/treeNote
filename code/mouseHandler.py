@@ -5,7 +5,6 @@ from vectors import Vct
 class MouseHandler:
     def __init__(self):
         self.clicked = False
-        self.mouse_node = None
         self.grab_node = None
         self.grab_start = Vct(0, 0)
         self.grab_offset = Vct(0, 0)
@@ -14,7 +13,7 @@ class MouseHandler:
         self.fh = FileHandler()
 
     def update(self, m1, ctrl, mouse_pos, master_node):
-        self.mouse_node = self.on_node(mouse_pos-self.offset, master_node)
+        mouse_node = self.on_node(mouse_pos-self.offset, master_node)
         master_node.unvisit()
 
         if m1:
@@ -26,29 +25,29 @@ class MouseHandler:
                 #master_node.unvisit()
 
                 if ctrl:
-                    parent = self.mouse_node if self.mouse_node else master_node
+                    parent = mouse_node if mouse_node else master_node
                     new_node = to.create_child(parent)
 
                     self.switch_grabbed(new_node, master_node)
                     self.grab_offset = Vct(0, 0)
                 else:
-                    if self.mouse_node:
-                        self.switch_grabbed(self.mouse_node, master_node)
-                        self.grap_offset = self.mouse_node.pos - mouse_pos + self.offset
+                    if mouse_node is not None:
+                        self.switch_grabbed(mouse_node, master_node)
+                        self.grap_offset = mouse_node.pos - mouse_pos + self.offset
             else:
-                if not self.grab_node:
+                if self.grab_node is None:
                     self.offset += mouse_pos - self.last_mouse
                 else:
-                    self.grab_node.apply_to_childs(lambda x: x.move((x.pos - self.grab_node.pos) + mouse_pos + self.offset + self.grab_offset))
+                    self.grab_node.apply_to_childs(lambda x: x.move((x.pos - self.grab_node.pos) + mouse_pos - self.offset + self.grab_offset))
 
         else:
             self.grab_node = None
             self.clicked = False
 
-            if self.mouse_node:
-                if not self.mouse_node.draw_thumbnail:
-                    self.mouse_node.need_reload = True
-                self.mouse_node.draw_thumbnail = True
+            if mouse_node:
+                if not mouse_node.draw_thumbnail:
+                    mouse_node.need_reload = True
+                mouse_node.draw_thumbnail = True
             else:
                 pass
                 #master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False, ignore_parent = True)
@@ -62,10 +61,8 @@ class MouseHandler:
         if (mouse_pos - node.pos).mag() < node.radius:
             return node
 
-        on_children = None
         for n in node.childs:
-            on_children = self.on_node(mouse_pos, n)
-            if on_children:
+            if on_children := self.on_node(mouse_pos, n):
                 return on_children
 
         return None

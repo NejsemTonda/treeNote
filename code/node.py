@@ -22,7 +22,6 @@ class Node:
 
         drawPos = self.pos+mid 
 
-
         pygame.draw.circle(screen, config.nodeColor, drawPos.int_tuple(), self.radius, config.line_width)
 
         if self.selected:

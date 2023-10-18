@@ -31,7 +31,7 @@ while not end:
 
     keys = pygame.key.get_pressed()
     screenSize = Vct(pygame.display.Info().current_w, pygame.display.Info().current_h)
-    mid = screenSize * 0.5 + mh.offset
+    mid = screenSize * 0.5
     mouse_pos = Vct.fromTuple(pygame.mouse.get_pos()) - mid
 
 
@@ -39,7 +39,7 @@ while not end:
     mh.update(pygame.mouse.get_pressed()[0], keys[pygame.K_LCTRL], mouse_pos, master_node)
     screen.fill((0,0,0))
 
-    master_node.apply_to_childs(lambda x : x.draw(screen, mid, font), ignore_parent = True)
+    master_node.apply_to_childs(lambda x : x.draw(screen, mid+mh.offset, font), ignore_parent = True)
     master_node.unvisit()
 
     master_node.apply_to_childs(lambda x : x.update(), ignore_parent = True)
