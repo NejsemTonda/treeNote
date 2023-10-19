@@ -16,7 +16,7 @@ class MouseHandler:
         mouse_node = self.on_node(mouse.pos-self.offset, master_node)
         master_node.unvisit()
         
-        self.offset += (1- (mouse.scaler/self.last_scale))*(mouse.pos+mid)
+        self.offset += (1-mouse.scaler/self.last_scale)*(mouse.pos+mid)
         
         if mouse.m1:
             if not self.clicked:
@@ -61,7 +61,6 @@ class MouseHandler:
         self.last_scale = mouse.scaler
 
     def on_node(self, mouse_pos, node):
-
         if (mouse_pos - node.pos).mag() < node.radius:
             return node
 

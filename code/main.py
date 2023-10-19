@@ -1,9 +1,4 @@
-import os
-import sys
 import pygame
-import numpy as np
-import time
-import math
 from vectors import Vct
 import config
 import initializer
@@ -36,14 +31,13 @@ while not end:
     keys = pygame.key.get_pressed()
     screenSize = Vct(pygame.display.Info().current_w, pygame.display.Info().current_h)
     mid = screenSize * 0.5
-    mouse.update(pos = (Vct.fromTuple(pygame.mouse.get_pos())*(1/mouse.scaler)) - mid,
-                 m1 = pygame.mouse.get_pressed()[0],
-                 ctrl = keys[pygame.K_LCTRL])
+    mouse.update((Vct.fromTuple(pygame.mouse.get_pos())*(1/mouse.scaler)) - mid,
+                 pygame.mouse.get_pressed()[0],
+                 keys[pygame.K_LCTRL])
  
     mh.update(mouse, master_node, mid)
     screen.fill((0,0,0))
 
-    #pygame.draw.circle(screen, (255,0,0), ((mouse.pos+mid)*mouse.scaler).int_tuple(), 10)
     master_node.apply_to_childs(lambda x : x.draw(screen, mid+mh.offset, mouse.scaler, font), ignore_parent = True)
     master_node.unvisit()
 

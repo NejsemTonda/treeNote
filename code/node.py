@@ -31,7 +31,7 @@ class Node:
         text_surface = font.render(self.name, True, (255, 255, 255))
         text_surface = pygame.transform.scale_by(text_surface, scaler)
         text_rect = text_surface.get_rect()
-        text_rect.center = (drawPos + Vct(0, self.radius + 10)).int_tuple()
+        text_rect.center = (drawPos + (Vct(0, self.radius + 10))*scaler).int_tuple()
         screen.blit(text_surface, text_rect)
 
         for n in self.childs:
