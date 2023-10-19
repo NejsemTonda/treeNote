@@ -26,6 +26,7 @@ while not end:
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
             end = True
             pygame.quit()
+            initializer.on_exit(master_node)
             exit()
      
 
@@ -48,7 +49,5 @@ while not end:
     clock.tick(60)
     pygame.display.update()
 
-
-
-
-
+    
+    
