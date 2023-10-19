@@ -89,8 +89,8 @@ class Node:
             return self
 
         for n in self.childs:
-            if n.find_selected() is not None:
-                return n
+            if selected := n.find_selected():
+                return selected
 
         return None
          
