@@ -17,24 +17,25 @@ class Node:
         self.draw_thumbnail = False
         #self.thumbnail = None
 
-    def draw(self, screen, mid, font):
+    def draw(self, screen, mid, scaler, font):
         if self.name == "master":
             return
 
-        drawPos = self.pos+mid 
+        drawPos = (self.pos+mid)*scaler
 
-        pygame.draw.circle(screen, config.nodeColor, drawPos.int_tuple(), self.radius, config.line_width)
+        pygame.draw.circle(screen, config.nodeColor, drawPos.int_tuple(), self.radius*scaler, config.line_width)
 
         if self.selected:
-            pygame.draw.circle(screen, config.selected, drawPos.int_tuple(), self.radius - 1, config.line_width)
+            pygame.draw.circle(screen, config.selected, drawPos.int_tuple(), (self.radius - 1)*scaler, config.line_width)
 
         text_surface = font.render(self.name, True, (255, 255, 255))
+        text_surface = pygame.transform.scale_by(text_surface, scaler)
         text_rect = text_surface.get_rect()
         text_rect.center = (drawPos + Vct(0, self.radius + 10)).int_tuple()
         screen.blit(text_surface, text_rect)
 
         for n in self.childs:
-            pygame.draw.aaline(screen, config.arrows, drawPos.int_tuple(), (n.pos+mid).int_tuple(), config.line_width)
+            pygame.draw.aaline(screen, config.arrows, drawPos.int_tuple(), ((n.pos+mid)*scaler).int_tuple(), config.line_width)
 
         #if self.draw_thumbnail and self.thumbnail:
         #    thumbnail_rect = self.get_thumbnail_rect()
@@ -79,7 +80,7 @@ class Node:
         new_name = get_correct_name(new_name) 
         create_file(new_name)
         
-        rad = config.default_node_size if self.name == "master" else self.radius * config.child_scaler
+        rad = config.defaultRadius if self.name == "master" else self.radius * config.child_scaler
         c = Node(tpos, rad, new_name)
         self.childs.append(c)
         return c

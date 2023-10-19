@@ -1,10 +1,11 @@
 # visuals
-fontSize = 32
+fontSize = 20
 defaultRadius = 30
 scaler = 0.75
 nodeSize =  30
 line_width = 2
 child_scaler = 0.75
+wheel_dist = 0.01
 
 
 # colors

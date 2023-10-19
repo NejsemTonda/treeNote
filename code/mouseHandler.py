@@ -1,5 +1,4 @@
 from fileHandler import FileHandler
-import pygame
 from vectors import Vct
 
 class MouseHandler:
@@ -10,35 +9,38 @@ class MouseHandler:
         self.grab_offset = Vct(0, 0)
         self.offset = Vct(0, 0)
         self.last_mouse = Vct(0, 0)
+        self.last_scale = 1
         self.fh = FileHandler()
 
-    def update(self, m1, ctrl, mouse_pos, master_node):
-        mouse_node = self.on_node(mouse_pos-self.offset, master_node)
+    def update(self, mouse, master_node, mid):
+        mouse_node = self.on_node(mouse.pos-self.offset, master_node)
         master_node.unvisit()
-
-        if m1:
+        
+        self.offset += (1- (mouse.scaler/self.last_scale))*(mouse.pos+mid)
+        
+        if mouse.m1:
             if not self.clicked:
                 self.clicked = True
-                self.grab_start = mouse_pos
+                self.grab_start = mouse.pos
 
                 #master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False, ignore_parent = True)
                 #master_node.unvisit()
 
-                if ctrl:
+                if mouse.ctrl:
                     parent = mouse_node if mouse_node else master_node
-                    new_node = parent.create_child(mouse_pos - self.offset)
+                    new_node = parent.create_child(mouse.pos - self.offset)
 
                     self.switch_grabbed(new_node, master_node)
                     self.grab_offset = Vct(0, 0)
                 else:
                     if mouse_node is not None:
                         self.switch_grabbed(mouse_node, master_node)
-                        self.grap_offset = mouse_node.pos - mouse_pos + self.offset
+                        self.grap_offset = mouse_node.pos - mouse.pos + self.offset
             else:
                 if self.grab_node is None:
-                    self.offset += mouse_pos - self.last_mouse
+                    self.offset += (mouse.pos - self.last_mouse)
                 else:
-                    self.grab_node.apply_to_childs(lambda x: x.move((x.pos - self.grab_node.pos) + mouse_pos - self.offset + self.grab_offset))
+                    self.grab_node.apply_to_childs(lambda x: x.move((x.pos - self.grab_node.pos) + mouse.pos - self.offset + self.grab_offset))
 
         else:
             self.grab_node = None
@@ -55,9 +57,11 @@ class MouseHandler:
 
 
         master_node.unvisit()
-        self.last_mouse = mouse_pos
+        self.last_mouse = mouse.pos
+        self.last_scale = mouse.scaler
 
     def on_node(self, mouse_pos, node):
+
         if (mouse_pos - node.pos).mag() < node.radius:
             return node
 
@@ -81,3 +85,20 @@ class MouseHandler:
         switch_to.selected = True
 
         self.fh.changed_to_file(switch_to.name)
+
+
+class MouseInfo():
+    def __init__(self):
+        self.pos = Vct(0,0)
+        self.ctrl = False
+        self.m1 = False
+        self.scaler = 1
+
+    def update(self, pos, m1, ctrl):
+        self.pos = pos
+        self.ctrl = ctrl
+        self.m1 = m1
+    
+    def scale(self, scaler):
+        new_scale = self.scaler + scaler
+        self.scaler = new_scale
