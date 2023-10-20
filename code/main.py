@@ -14,6 +14,9 @@ font = pygame.font.Font('../src/font.ttf', config.fontSize)
 
 
 master_node = initializer.getMasterNode()
+master_node.apply_to_childs(lambda x: x.reload_thumbnail(), ignore_parent = True)
+master_node.unvisit()
+
 mh = MouseHandler()
 mouse = MouseInfo()
 

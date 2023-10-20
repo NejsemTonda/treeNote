@@ -1,6 +1,6 @@
 import config
 import os
-#from convertor import convert
+from convertor import convert
 
 class FileHandler:
     def __init__(self):
@@ -23,7 +23,7 @@ class FileHandler:
         if file.path != self.opened_file:
             self.delete_file(self.opened_file)
         
-        #convert(file.path)
+        convert(file.path)
         file.dump()
 
     def load_file(self, file_path):

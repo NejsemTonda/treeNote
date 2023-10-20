@@ -23,8 +23,8 @@ class MouseHandler:
                 self.clicked = True
                 self.grab_start = mouse.pos
 
-                #master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False, ignore_parent = True)
-                #master_node.unvisit()
+                master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False), ignore_parent = True)
+                master_node.unvisit()
 
                 if mouse.ctrl:
                     parent = mouse_node if mouse_node else master_node
@@ -47,13 +47,11 @@ class MouseHandler:
             self.clicked = False
 
             if mouse_node:
-                if not mouse_node.draw_thumbnail:
-                    mouse_node.need_reload = True
+                mouse_node.reload_thumbnail()
                 mouse_node.draw_thumbnail = True
             else:
-                pass
-                #master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False, ignore_parent = True)
-                #master_node.unvisit()
+                master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False), ignore_parent = True)
+                master_node.unvisit()
 
 
         master_node.unvisit()
