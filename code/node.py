@@ -1,8 +1,10 @@
 import os
 import config
 import pygame
+
 from vectors import Vct
 from fileHandler import get_correct_name, create_file
+import drawing
 
 class Node:
     def __init__(self, pos, r, name):
@@ -18,31 +20,11 @@ class Node:
 
     def draw(self, screen, mid, scaler, font):
         drawPos = (self.pos+mid)*scaler
-
-        # draw the node itself
-        pygame.draw.circle(screen, config.nodeColor, drawPos.int_tuple(), self.radius*scaler, config.line_width)
-
-        # draw inner circle if selected
-        if self.selected:
-            pygame.draw.circle(screen, config.selected, drawPos.int_tuple(), (self.radius - 1)*scaler, config.line_width)
-
-        # draw name of the node
-        text_surface = font.render(self.name, True, (255, 255, 255))
-        text_surface = pygame.transform.scale_by(text_surface, scaler)
-        text_rect = text_surface.get_rect()
-        text_rect.center = (drawPos + (Vct(0, self.radius + 10))*scaler).int_tuple()
-        screen.blit(text_surface, text_rect)
-
-        # draw lines to childrens
-        for n in self.childs:
-            pygame.draw.aaline(screen, config.arrows, drawPos.int_tuple(), ((n.pos+mid)*scaler).int_tuple(), config.line_width)
-
-        # if mouse is on this node, draw thumbnail
+        drawing.draw_node(screen, self, drawPos, scaler)
+        drawing.draw_name(screen, self, drawPos, scaler, font)
+        drawing.draw_connections(screen, self, drawPos, scaler)
         if self.draw_thumbnail:
-            if self.thumbnail is None:
-                self.reload_thumbnail()
-            else:
-                screen.blit(self.thumbnail, (mid + self.get_thubmnail_rect().topleft).int_tuple())
+            drawing.draw_thumbnail(screen, self, drawPos, scaler)
 
     def get_thubmnail_rect(self):
         rect = self.thumbnail.get_rect()
