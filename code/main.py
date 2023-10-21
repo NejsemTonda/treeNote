@@ -3,6 +3,7 @@ from vectors import Vct
 import config
 import initializer
 from mouseHandler import MouseHandler, MouseInfo
+from uiAligner import UIAligner
 
 pygame.init()
 
@@ -19,6 +20,7 @@ master_node.unvisit()
 
 mh = MouseHandler()
 mouse = MouseInfo()
+aligner = UIAligner()
 
 while not end:
     for event in pygame.event.get():
@@ -46,6 +48,11 @@ while not end:
 
     master_node.apply_to_childs(lambda x : x.update(), ignore_parent = True)
     master_node.unvisit()
+
+    master_node.apply_to_childs(lambda x : aligner.dump(x), ignore_parent = True)
+    master_node.unvisit()
+
+    aligner.align()
 
     clock.tick(60)
     pygame.display.update()

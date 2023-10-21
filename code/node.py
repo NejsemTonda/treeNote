@@ -42,17 +42,19 @@ class Node:
             if self.thumbnail is None:
                 self.reload_thumbnail()
             else:
-                rect = self.thumbnail.get_rect()
-                rect.center = (drawPos - Vct(self.radius+10+rect.width//2, 0)).int_tuple()
-                screen.blit(self.thumbnail, rect.topleft)
+                screen.blit(self.thumbnail, (mid + self.get_thubmnail_rect().topleft).int_tuple())
 
+    def get_thubmnail_rect(self):
+        rect = self.thumbnail.get_rect()
+        rect.center = (self.pos - Vct(self.radius+10+rect.width//2, 0)).int_tuple()
+        return rect
 
     def move(self, to):
+        if self.draw_thumbnail:
+            return
         self.des_pos = to
 
     def update(self):
-        if self.draw_thumbnail:
-            return
         if self.pos == self.des_pos:
             return
         dif = self.des_pos - self.pos 
