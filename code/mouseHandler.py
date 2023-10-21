@@ -34,6 +34,7 @@ class MouseHandler:
                     self.grab_offset = Vct(0, 0)
                 else:
                     if mouse_node is not None:
+                        mouse_node.reload_thumbnail()
                         self.switch_grabbed(mouse_node, master_node)
                         self.grap_offset = mouse_node.pos - mouse.pos + self.offset
             else:
@@ -47,7 +48,6 @@ class MouseHandler:
             self.clicked = False
 
             if mouse_node:
-                mouse_node.reload_thumbnail()
                 mouse_node.draw_thumbnail = True
             else:
                 master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False), ignore_parent = True)
