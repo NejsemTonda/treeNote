@@ -28,7 +28,8 @@ class UIAligner:
 
         if mouse_node is None and self.nodes_outofplace:
             for i, n in enumerate(self.node_pile):
-                n.move(self.remembered_positions[i])
+                if i < len(self.remembered_positions):
+                    n.move(self.remembered_positions[i])
 
             self.nodes_outofplace = False
 

@@ -39,8 +39,7 @@ def on_exit(master_node):
     file.close()
 
 def dump_node(node, file):
-    file.write(f"{node.name};{int(node.pos.x)},{int(node.pos.y)};{len(node.childs)}\n")
+    file.write(f"{node.name};{int(node.des_pos.x)},{int(node.des_pos.y)};{len(node.childs)}\n")
 
     for child in node.childs:
         dump_node(child, file)
-

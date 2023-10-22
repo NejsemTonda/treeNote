@@ -21,7 +21,7 @@ class FileHandler:
         file = NoteFile(self.edit_file)
         # if topic changed, delete old file 
         if file.path != self.opened_file:
-            self.delete_file(self.opened_file)
+            delete_file(self.opened_file)
         
         convert(file.path)
         file.dump()

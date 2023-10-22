@@ -41,7 +41,9 @@ class MouseHandler:
                 if self.grab_node is None:
                     self.offset += (mouse.pos - self.last_mouse)
                 else:
-                    self.grab_node.apply_to_childs(lambda x: x.move((x.pos - self.grab_node.pos) + mouse.pos - self.offset + self.grab_offset))
+                    self.grab_node.apply_to_childs(lambda x: x.move((x.pos - self.grab_node.pos) + mouse.pos - self.offset + self.grab_offset), ignore_parent=False)
+                    master_node.unvisit()
+                    
 
         else:
             self.grab_node = None
