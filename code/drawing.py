@@ -42,6 +42,6 @@ def draw_arrow(screen, start, end):
     arrow_leg2 = (end[0] - arrow_size * math.cos(angle + math.pi / 6),
                   end[1] - arrow_size * math.sin(angle + math.pi / 6))
 
-    pygame.draw.line(screen, config.arrows, start.int_tuple(), end.int_tuple(), 1)
-    pygame.draw.line(screen, config.arrows, arrow_leg1, end.int_tuple(), 1)
-    pygame.draw.line(screen, config.arrows, arrow_leg2, end.int_tuple(), 1)
+    pygame.draw.line(screen, config.arrows, start.int_tuple(), end.int_tuple(), config.arrow_width)
+    pygame.draw.line(screen, config.arrows, arrow_leg1, end.int_tuple(), config.arrow_width)
+    pygame.draw.line(screen, config.arrows, arrow_leg2, end.int_tuple(), config.arrow_width)

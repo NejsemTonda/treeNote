@@ -41,7 +41,7 @@ while not end:
                  keys[pygame.K_LCTRL])
  
     mh.update(mouse, master_node, mid)
-    screen.fill((0,0,0))
+    screen.fill(config.background)
 
     master_node.apply_to_childs(lambda x : x.draw(screen, mid+mh.offset, mouse.scaler, font), ignore_parent = True)
     master_node.unvisit()
