@@ -62,6 +62,25 @@ def create_file(topic):
     with open(config.notes_dir + topic + config.ext, 'w') as file:
         file.write("# " + topic) 
 
+def init_files():
+    dir_name = os.path.basename(os.getcwd()) 
+    if not os.path.exists(config.notes_dir):
+        os.makedirs(config.notes_dir)
+
+    if not os.path.exists(config.notes_dir+dir_name):
+        create_file(dir_name)
+
+    if not os.path.exists(config.cache_dir):
+        os.makedirs(config.cache_dir)
+
+    if not os.path.exists(f"edit{config.ext}"):
+        open(f"edit{config.ext}", 'w').close()
+
+    if not os.path.exists(".session"):
+        with open(".session", 'w') as file:
+            file.write(f"{name};0,0;0")
+            
+
 class NoteFile:
     def __init__(self, name):
         self.topic = None
