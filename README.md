@@ -9,8 +9,8 @@ I wanted to create an app where I would be comfortable making notes. I didn't li
 ### How to Run
 
 1. install requirements: `pip install -r requirements.txt`
-2. run init: `python3 main.py --init`
-3. everytime after first run: `python3 main.py`
+2. run init: `python3 treeNote.py --init`
+3. everytime after first run: `python3 treeNote.py`
 
 ### Controls
 
