@@ -23,3 +23,10 @@ I wanted to create an app where I would be comfortable making notes. I didn't li
 
 
 see more in documentation (Not ready yet) (https://github.com/NejsemTonda/treeNote/blob/main/documentation/documentation.md)
+
+### TODO's
+
+* fix bug when drawing thumbnail and then moving the node, its childres wont remember their desired locations
+* Improve Node object design (add inharitance)
+* Remove node.visited (not used at all)
+
