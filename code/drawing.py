@@ -5,11 +5,11 @@ import math
 
 def draw_node(screen, node, pos, scaler):
     # draw the node itself
-    pygame.draw.circle(screen, config.nodeColor, pos.int_tuple(), node.radius*scaler, config.line_width)
+    pygame.draw.circle(screen, config.nodeColor, pos.int_tuple(), node.radius*scaler, int(config.line_width*scaler))
 
     # draw inner circle if selected
     if node.selected:
-        pygame.draw.circle(screen, config.selected, pos.int_tuple(), (node.radius - 1)*scaler, config.line_width)
+        pygame.draw.circle(screen, config.selected, pos.int_tuple(), (node.radius - 1)*scaler, int(config.line_width*scaler))
 
 def draw_name(screen, node, pos, scaler, font):
     text_surface = font.render(node.name, True, (255, 255, 255))

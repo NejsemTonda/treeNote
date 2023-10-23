@@ -1,5 +1,6 @@
 from fileHandler import FileHandler
 from vectors import Vct
+import config
 
 class MouseHandler:
     def __init__(self):
@@ -11,6 +12,7 @@ class MouseHandler:
         self.last_mouse = Vct(0, 0)
         self.last_scale = 1
         self.fh = FileHandler()
+        self.thumbnail_timer = 0
 
     def update(self, mouse, master_node, mid):
         mouse_node = self.on_node(mouse.pos-self.offset, master_node)
@@ -41,7 +43,7 @@ class MouseHandler:
                 if self.grab_node is None:
                     self.offset += (mouse.pos - self.last_mouse)
                 else:
-                    self.grab_node.apply_to_childs(lambda x: x.move((x.pos - self.grab_node.pos) + mouse.pos - self.offset + self.grab_offset), ignore_parent=False)
+                    self.grab_node.apply_to_childs(lambda x: x.move((x.pos - self.grab_node.pos) + mouse.pos - self.offset))
                     master_node.unvisit()
                     
 
@@ -50,10 +52,13 @@ class MouseHandler:
             self.clicked = False
 
             if mouse_node:
-                mouse_node.draw_thumbnail = True
+                self.thumbnail_timer += 1
+                if self.thumbnail_timer > config.thumbnail_wait_time:
+                    mouse_node.draw_thumbnail = True
             else:
                 master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False), ignore_parent = True)
                 master_node.unvisit()
+                self.thumbnail_timer = 0
 
 
         master_node.unvisit()

@@ -10,6 +10,7 @@ wheel_dist = 0.01
 _x = 800
 thumbnail_size = (_x, _x * 1.41421) # (x, x*sqrt(2))
 thumbnail_crop_by = 250
+thumbnail_wait_time = 10
 
 
 # colors
