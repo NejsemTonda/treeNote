@@ -9,6 +9,7 @@ I wanted to create an app where I would be comfortable making notes. I didn't li
 ### How to Run
 
 1. install requirements: `pip install -r requirements.txt`
+    * Don't forget about pandoc and pdftoppm on you linux machine
 2. run init: `python3 treeNote.py --init`
 3. everytime after first run: `python3 treeNote.py`
 
@@ -26,7 +27,6 @@ see more in documentation (Not ready yet) (https://github.com/NejsemTonda/treeNo
 
 ### TODO's
 
-* fix bug when drawing thumbnail and then moving the node, its childres wont remember their desired locations
 * Improve Node object design (add inharitance)
 * Remove node.visited (not used at all)
 
