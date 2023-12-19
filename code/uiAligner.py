@@ -21,8 +21,7 @@ class UIAligner:
 
                 if diff.mag() < n1.radius + n2.radius:
                     overlap_size = n1.radius + n2.radius - diff.mag()
-                    n1.move(n1.pos - diff*overlap_size)
-                    n1.move(n2.pos - diff*overlap_size)
+                    n1.move(n1.pos - diff.norm()*overlap_size)
 
         mouse_node = next((n for n in self.node_pile if n.draw_thumbnail), None)
 
