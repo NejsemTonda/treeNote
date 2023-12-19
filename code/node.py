@@ -25,7 +25,7 @@ class Node:
         drawing.draw_connections(screen, self, drawPos, scaler)
         if self.draw_thumbnail:
             drawing.draw_thumbnail(screen, self, drawPos, scaler)
-
+        
     def get_thubmnail_rect(self):
         rect = self.thumbnail.get_rect() if self.thumbnail is not None else pygame.Rect((0,0), (0,0))
         rect.center = (self.pos - Vct(self.radius+10+rect.width//2, 0)).int_tuple()
@@ -35,6 +35,11 @@ class Node:
         if self.draw_thumbnail:
             return
         self.des_pos = to
+
+    def shift(self, to):
+        if self.draw_thumbnail:
+            return
+        self.des_pos += to
 
     def update(self):
         if self.pos == self.des_pos:
