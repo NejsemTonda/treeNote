@@ -16,7 +16,6 @@ class MouseHandler:
 
     def update(self, mouse, master_node, mid):
         mouse_node = self.on_node(mouse.pos-self.offset, master_node)
-        master_node.unvisit()
         
         self.offset += (1-mouse.scaler/self.last_scale)*(mouse.pos+mid)
         
@@ -26,7 +25,6 @@ class MouseHandler:
                 self.grab_start = mouse.pos
 
                 master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False), ignore_parent = True)
-                master_node.unvisit()
 
                 if mouse.ctrl:
                     parent = mouse_node if mouse_node else master_node
@@ -45,7 +43,6 @@ class MouseHandler:
                 else:
                     #self.grab_node.apply_to_childs(lambda x: x.move((x.pos - self.grab_node.pos) + mouse.pos - self.offset))
                     self.grab_node.apply_to_childs(lambda x: x.shift(mouse.pos - self.last_mouse))
-                    master_node.unvisit()
                     
 
         else:
@@ -58,11 +55,9 @@ class MouseHandler:
                     mouse_node.draw_thumbnail = True
             else:
                 master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False), ignore_parent = True)
-                master_node.unvisit()
                 self.thumbnail_timer = 0
 
 
-        master_node.unvisit()
         self.last_mouse = mouse.pos
         self.last_scale = mouse.scaler
 
@@ -82,7 +77,6 @@ class MouseHandler:
         # find selected node cuz its name may need change
         if self.fh.opened_file is not None: 
             selected_node = master_node.find_selected() 
-            master_node.unvisit()
             new_name = self.fh.get_current_topic()
             selected_node.name = new_name
             selected_node.selected = False

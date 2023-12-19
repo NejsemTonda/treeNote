@@ -17,7 +17,6 @@ def main():
     
     master_node = initializer.getMasterNode()
     master_node.apply_to_childs(lambda x: x.reload_thumbnail(), ignore_parent = True)
-    master_node.unvisit()
     
     mh = MouseHandler()
     mouse = MouseInfo()
@@ -45,13 +44,10 @@ def main():
         screen.fill(config.background)
     
         master_node.apply_to_childs(lambda x : x.draw(screen, mid+mh.offset, mouse.scaler, font), ignore_parent = True)
-        master_node.unvisit()
     
         master_node.apply_to_childs(lambda x : x.update(), ignore_parent = True)
-        master_node.unvisit()
     
         master_node.apply_to_childs(lambda x : aligner.dump(x), ignore_parent = True)
-        master_node.unvisit()
     
         aligner.align()
     

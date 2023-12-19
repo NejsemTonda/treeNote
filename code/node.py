@@ -11,7 +11,6 @@ class Node:
         self.pos = pos
         self.des_pos = pos
         self.radius = r
-        self.visited = False
         self.selected = False
         self.name = name
         self.childs = []
@@ -51,20 +50,12 @@ class Node:
         self.pos = self.pos + dif*0.1
 
     def apply_to_childs(self, foo, ignore_parent=False):
-        self.visited = True
 
         if not ignore_parent:
             foo(self)
 
         for n in self.childs:
-            if n.visited:
-                continue
             n.apply_to_childs(foo)
-
-    def unvisit(self):
-        self.visited = False
-        for n in self.childs:
-            n.unvisit()
 
     def create_child(self, tpos):
         new_name = self.name + "subtopic"
