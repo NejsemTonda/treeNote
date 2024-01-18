@@ -77,8 +77,7 @@ def init_files():
         open(f"edit{config.ext}", 'w').close()
 
     if not os.path.exists(".session"):
-        with open(".session", 'w') as file:
-            file.write(f"{name};0,0;0")
+        open(f".session", 'w').close()
             
 
 class NoteFile:
