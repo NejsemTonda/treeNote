@@ -75,6 +75,8 @@ class Node:
             if selected := n.find_selected():
                 return selected
 
+        if self.name == "master":
+            return self
         return None
          
 

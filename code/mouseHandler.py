@@ -1,4 +1,4 @@
-from fileHandler import FileHandler
+from fileHandler import FileHandler, check_for_delete
 from vectors import Vct
 import config
 
@@ -57,6 +57,7 @@ class MouseHandler:
                 master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False), ignore_parent = True)
                 self.thumbnail_timer = 0
 
+        master_node.apply_to_childs(lambda x: check_for_delete(x))
 
         self.last_mouse = mouse.pos
         self.last_scale = mouse.scaler
@@ -75,7 +76,7 @@ class MouseHandler:
         self.grab_node = switch_to
 
         # find selected node cuz its name may need change
-        if self.fh.opened_file is not None: 
+        if self.fh.opened_file is not None:
             selected_node = master_node.find_selected() 
             new_name = self.fh.get_current_topic()
             selected_node.name = new_name
