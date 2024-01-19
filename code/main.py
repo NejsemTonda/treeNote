@@ -24,7 +24,7 @@ def main():
     
     while not end:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+            if event.type == pygame.QUIT:
                 end = True
                 pygame.quit()
                 initializer.on_exit(master_node)
@@ -48,7 +48,7 @@ def main():
         master_node.apply_to_childs(lambda x : x.update(), ignore_parent = True)
     
         master_node.apply_to_childs(lambda x : aligner.dump(x), ignore_parent = True)
-    
+
         aligner.align()
     
         clock.tick(60)
