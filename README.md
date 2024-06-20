@@ -28,5 +28,6 @@ see more in documentation (Not ready yet) (https://github.com/NejsemTonda/treeNo
 ### TODO's
 
 * Improve Node object design (add inharitance)
-* Remove node.visited (not used at all)
-
+* Nodes collides with deleted nodes? Or with thumbnail of deleted nodes
+* Save `.session` on error
+* Throws an error when 2 nodes have same name 
