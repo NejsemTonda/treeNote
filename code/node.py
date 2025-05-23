@@ -6,6 +6,7 @@ from vectors import Vct
 from fileHandler import get_correct_name, create_file
 import drawing
 
+
 class Node:
     def __init__(self, pos, r, name):
         self.pos = pos
@@ -18,16 +19,16 @@ class Node:
         self.thumbnail = None
 
     def draw(self, screen, mid, scaler, font):
-        drawPos = (self.pos+mid)*scaler
-        drawing.draw_node(screen, self, drawPos, scaler)
-        drawing.draw_name(screen, self, drawPos, scaler, font)
-        drawing.draw_connections(screen, self, drawPos, scaler)
+        draw_pos = (self.pos + mid) * scaler
+        drawing.draw_node(screen, self, draw_pos, scaler)
+        drawing.draw_name(screen, self, draw_pos, scaler, font)
+        drawing.draw_connections(screen, self, draw_pos, scaler)
         if self.draw_thumbnail:
-            drawing.draw_thumbnail(screen, self, drawPos, scaler)
-        
+            drawing.draw_thumbnail(screen, self, draw_pos, scaler)
+
     def get_thubmnail_rect(self):
-        rect = self.thumbnail.get_rect() if self.thumbnail is not None else pygame.Rect((0,0), (0,0))
-        rect.center = (self.pos - Vct(self.radius+10+rect.width//2, 0)).int_tuple()
+        rect = self.thumbnail.get_rect() if self.thumbnail is not None else pygame.Rect((0, 0), (0, 0))
+        rect.center = (self.pos - Vct(self.radius + 10 + rect.width // 2, 0)).int_tuple()
         return rect
 
     def move(self, to):
@@ -43,14 +44,13 @@ class Node:
     def update(self):
         if self.pos == self.des_pos:
             return
-        dif = self.des_pos - self.pos 
+        dif = self.des_pos - self.pos
         if dif.mag() < 1:
             self.pos = self.des_pos
             return
-        self.pos = self.pos + dif*0.1
+        self.pos = self.pos + dif * 0.1
 
     def apply_to_childs(self, foo, ignore_parent=False):
-
         if not ignore_parent:
             foo(self)
 
@@ -59,9 +59,9 @@ class Node:
 
     def create_child(self, tpos):
         new_name = self.name + "subtopic"
-        new_name = get_correct_name(new_name) 
+        new_name = get_correct_name(new_name)
         create_file(new_name)
-        
+
         rad = config.defaultRadius if self.name == "master" else self.radius * config.child_scaler
         c = Node(tpos, rad, new_name)
         self.childs.append(c)
@@ -78,14 +78,13 @@ class Node:
         if self.name == "master":
             return self
         return None
-         
 
     def str(self):
         s = ""
         s += f"{self.name} --> (self.pos); childs={len(self.childs)}"
         for c in self.childs:
             s += "\n"
-            s += "\t" + c.str() 
+            s += "\t" + c.str()
 
         return s
 
@@ -94,14 +93,13 @@ class Node:
             self.thumbnail = pygame.image.load(f"{config.cache_dir}{self.name}-1.png")
         except (FileNotFoundError, pygame.error):
             print(f"trying to load {config.cache_dir}{self.name}-1.png, but the file was not genereted yet")
-            return 
+            return
 
-        
         # scale
         self.thumbnail = pygame.transform.smoothscale(self.thumbnail, config.thumbnail_size)
 
         # crop
         size = self.thumbnail.get_size()
-        new_surface = pygame.Surface((size[0]-config.thumbnail_crop_by, size[1]-config.thumbnail_crop_by*1.41421))
-        new_surface.blit(self.thumbnail, (-config.thumbnail_crop_by/2,-config.thumbnail_crop_by/2))
+        new_surface = pygame.Surface((size[0] - config.thumbnail_crop_by, size[1] - config.thumbnail_crop_by * 1.41421))
+        new_surface.blit(self.thumbnail, (-config.thumbnail_crop_by / 2, -config.thumbnail_crop_by / 2))
         self.thumbnail = new_surface

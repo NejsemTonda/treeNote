@@ -1,2 +1,2 @@
-pygame==2.5.0
+pygame
 # this application also need pandoc and pdftoppm as its called when converting file

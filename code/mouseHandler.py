@@ -2,6 +2,7 @@ from fileHandler import FileHandler, check_for_delete
 from vectors import Vct
 import config
 
+
 class MouseHandler:
     def __init__(self):
         self.clicked = False
@@ -13,18 +14,19 @@ class MouseHandler:
         self.last_scale = 1
         self.fh = FileHandler()
         self.thumbnail_timer = 0
+        self.grap_offset = None
 
     def update(self, mouse, master_node, mid):
-        mouse_node = self.on_node(mouse.pos-self.offset, master_node)
-        
-        self.offset += (1-mouse.scaler/self.last_scale)*(mouse.pos+mid)
-        
+        mouse_node = self.on_node(mouse.pos - self.offset, master_node)
+
+        self.offset += (1 - mouse.scaler / self.last_scale) * (mouse.pos + mid)
+
         if mouse.m1:
             if not self.clicked:
                 self.clicked = True
                 self.grab_start = mouse.pos
 
-                master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False), ignore_parent = True)
+                master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False), ignore_parent=True)
 
                 if mouse.ctrl:
                     parent = mouse_node if mouse_node else master_node
@@ -39,11 +41,10 @@ class MouseHandler:
                         self.grap_offset = mouse_node.pos - mouse.pos + self.offset
             else:
                 if self.grab_node is None:
-                    self.offset += (mouse.pos - self.last_mouse)
+                    self.offset += mouse.pos - self.last_mouse
                 else:
-                    #self.grab_node.apply_to_childs(lambda x: x.move((x.pos - self.grab_node.pos) + mouse.pos - self.offset))
+                    # self.grab_node.apply_to_childs(lambda x: x.move((x.pos - self.grab_node.pos) + mouse.pos - self.offset))
                     self.grab_node.apply_to_childs(lambda x: x.shift(mouse.pos - self.last_mouse))
-                    
 
         else:
             self.grab_node = None
@@ -54,7 +55,7 @@ class MouseHandler:
                 if self.thumbnail_timer > config.thumbnail_wait_time:
                     mouse_node.draw_thumbnail = True
             else:
-                master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False), ignore_parent = True)
+                master_node.apply_to_childs(lambda x: setattr(x, "draw_thumbnail", False), ignore_parent=True)
                 self.thumbnail_timer = 0
 
         master_node.apply_to_childs(lambda x: check_for_delete(x))
@@ -77,7 +78,7 @@ class MouseHandler:
 
         # find selected node cuz its name may need change
         if self.fh.opened_file is not None:
-            selected_node = master_node.find_selected() 
+            selected_node = master_node.find_selected()
             new_name = self.fh.get_current_topic()
             selected_node.name = new_name
             selected_node.selected = False
@@ -87,9 +88,9 @@ class MouseHandler:
         self.fh.changed_to_file(switch_to.name)
 
 
-class MouseInfo():
+class MouseInfo:
     def __init__(self):
-        self.pos = Vct(0,0)
+        self.pos = Vct(0, 0)
         self.ctrl = False
         self.m1 = False
         self.scaler = 1
@@ -98,7 +99,7 @@ class MouseInfo():
         self.pos = pos
         self.ctrl = ctrl
         self.m1 = m1
-    
+
     def scale(self, scaler):
         new_scale = self.scaler + scaler
         self.scaler = new_scale
