@@ -1,4 +1,7 @@
+import os
+
 import pygame
+
 from vectors import Vct
 import config
 import initializer
@@ -7,14 +10,14 @@ from uiAligner import UIAligner
 
 WHITE = (255, 255, 255)
 
-
 def main():
     pygame.init()
 
     screen = pygame.display.set_mode((0, 0), pygame.RESIZABLE)
     clock = pygame.time.Clock()
     end = False
-    font = pygame.font.Font("src/JetBrains.ttf", config.fontSize)
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    font = pygame.font.Font(f"{dir_path}/src/JetBrains.ttf", config.fontSize)
 
     master_node = initializer.getMasterNode()
     master_node.apply_to_childs(lambda x: x.reload_thumbnail(), ignore_parent=True)
