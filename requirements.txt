@@ -1,2 +1,2 @@
 pygame
-# this application also need pandoc and pdftoppm as its called when converting file
+# this application also need pandoc and poppler (binary pdftoppm) as its called when converting file
